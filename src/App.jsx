@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-
+const API_URI = import.meta.env.VITE_API_LINK;
 function App() {
   const [newUser, setNewUser] = useState({
     "name": "",
@@ -8,17 +8,20 @@ function App() {
   })
   const [newUserStatus, setNewUserStatus] = useState("Add New User")
   const [users, setUsers] = useState([]);
-  const [usersState, setUsersState] = useState()
+  const [usersState, setUsersState] = useState();
+
   async function getUsers() {
+    const url = API_URI+'/getUsers';
     setUsersState("getting users data...")
-    const users = await fetch('https://test-vercel-server-nine.vercel.app/getUsers').then(res => res.json()).then(d => { console.table(d); setUsers(d); setUsersState("success")}).catch(err => { console.error(err) })
+    const users = await fetch(url).then(res => res.json()).then(d => { console.table(d); setUsers(d); setUsersState("success")}).catch(err => { console.error(err) })
   }
   async function handleCreateUser() {
     if(newUser.name === "" || newUser.name === "" || newUser.password === ""){
       setNewUserStatus("Some fields are empty!");
       return
     }
-    setNewUserStatus("adding...")
+    setNewUserStatus("adding...");
+    const url = API_URI+'/addUser';
     const options = {
       method: "POST",
       body: JSON.stringify(newUser),
@@ -26,10 +29,11 @@ function App() {
         "Content-Type": "application/json",
       }
     }
-    await fetch("https://test-vercel-server-l33n94e83-yousafs-projects-69c412bf.vercel.app/addUser", options)
+    await fetch(url, options)
       .then(res => res.json())
       .then(d => {
         setNewUserStatus(d.status ?? "new user '" + d.name + "' added!");
+          setUsers(c => [...c, newUser])
           setNewUser({
             "name": "",
             "email": "",
@@ -55,7 +59,7 @@ function App() {
 
       </div>
       <div className="users">
-        {usersState === "getting users data..." ? usersState : users && users.map((user, i) => {
+        {usersState === "getting users data..." ? usersState : users && users.reverse().map((user, i) => {
           return (
             <div className="user" key={i}>
               <p className="name">Name: {user.name}</p>

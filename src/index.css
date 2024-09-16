@@ -124,11 +124,21 @@ form {
   font-family: inherit;
   margin-inline: 1rem;
   width: 720px;
+  animation: aaa 200ms linear forwards;
   p {
     word-break: break-all;
   }
   @media (max-width: 719px) {
     width: auto;
     max-width: 720px;
+  }
+}
+
+@keyframes aaa {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
