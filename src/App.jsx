@@ -12,7 +12,7 @@ function App() {
 
   async function getUsers() {
     const url = API_URI+'/getUsers';
-    setUsersState("getting users data...")
+    setUsersState("getting all users data...")
     const users = await fetch(url).then(res => res.json()).then(d => { console.table(d); setUsers(d); setUsersState("success")}).catch(err => { console.error(err) })
   }
   async function handleCreateUser() {
